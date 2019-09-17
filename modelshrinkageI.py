@@ -115,7 +115,7 @@ distance = math.sqrt( ((agents[1][1] - agents[0][1])**2) + ((agents[1][0]-agents
 
 print ("The distance between our two points is", distance, "units")
 
-print ("The coordinates of our agents are", agents)
+print ("The coordinates of our agents (y, x) are", agents)
 
 #Calculating the most easterly (eastmost?) and northerly agents
 
