@@ -7,35 +7,26 @@ Created on Mon Sep 16 14:12:33 2019
 
 #importing packages and creating list
 
-import matplotlib.pyplot
+import matplotlib.pyplot 
+import matplotlib.animation
 import math
 import agentframework
 import csv
 import random
-import sys
-
-#defining our arguments and allowing them to be read in via command line
 
 
-#Communicating = sys.argv[0]
-#print(Communicating)
-print("hi")
+#defining our arguments
 
-try:
-    print("Setting parameters")
-    num_of_agents = int(sys.argv[1])
+num_of_agents = 10
 
-    num_of_iterations = int(sys.argv[2])
+num_of_iterations = 100
 
-    neighbourhood = int(sys.argv[3])
-
-except:
-    print("Skipped setting parameters")
-    pass
-
+neighbourhood = 20
 
 agents = []   
+
 #Reading in data 
+
 
 environment = []
 
@@ -67,7 +58,29 @@ for i in range (num_of_agents):
     agents.append(agentframework.Agent(environment, agents))
     
 #First we randomise the order of agents acting for every iteration, then we move
-#them, make them eat, and share food with their neighbours     
+#them, make them eat, and share food with their neighbours   
+  
+fig = matplotlib.pyplot.figure(figsize=(12, 12))
+    
+def update(frame_number):
+    
+    fig.clear()   
+    matplotlib.pyplot.imshow(environment)
+    matplotlib.pyplot.xlim(0, agents[0].environment_width)
+    matplotlib.pyplot.ylim(0, agents[0].environment_height)
+
+    random.shuffle(agents)
+
+    for agent in agents:
+        agent.move()
+        agent.eat()
+        agent.share_with_neighbours(neighbourhood)
+        
+   
+    
+    for agent in agents:
+        matplotlib.pyplot.scatter(agent.x,agent.y)
+
     
     
 for j in range(num_of_iterations):
@@ -80,11 +93,12 @@ for j in range(num_of_iterations):
         
         
 #Testing to see if our agents have acces to the locations of other agents
+"""
 print("Our first agent is at", agents[0].x, agents[0].y, ", some other agents he's heard of are at:")
 
 for i in range(10):
     print(agents[0].agents[i].x, agents[0].agents[i].y)
-
+"""
 #Showing our agents on a plot
 
 matplotlib.pyplot.ylim(0, 299)
@@ -95,13 +109,15 @@ for i in range (num_of_agents):
 
     matplotlib.pyplot.scatter(agents[i].x,agents[i].y)
 
-#matplotlib.pyplot.savefig('./{0}.png'.format(num_of_agents))
+
+animation = matplotlib.animation.FuncAnimation(fig, update, interval=1)
 
 matplotlib.pyplot.show()
 
 #Working out the distances between all agents
-
+"""
 for j in range(num_of_agents):
     for i in range(num_of_agents):
     
         distance = distance_between(agents[i], agents[j])
+"""     

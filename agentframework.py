@@ -11,13 +11,15 @@ class Agent():
     
         
     def __init__ (self, environment, agents):
-         self.x = random.randint(0,299)
-         self.y = random.randint(0,299)
+         
          self.environment = environment
+         self.environment_height = len(environment)
+         self.environment_width = len(environment)
+         self.x = random.randint(0, self.environment_width-1)
+         self.y = random.randint(0, self.environment_height-1)
          self.store = 0 
          self.agents = agents
-         
-    
+        
     def move(self):
         if random.random() < 0.5:
             self.y = (self.y + 1) % 300
@@ -45,6 +47,6 @@ class Agent():
                 average_store = (self.store + agent.store)/2
                 self.store = average_store
                 agent.store = average_store
-                print("Shared " + str(distance) + " " + str(average_store))
+              #  print("Shared with agent " + str(distance) + " units away, now they both have" + str(average_store))
                
         
