@@ -10,20 +10,24 @@ Created on Mon Sep 16 14:12:33 2019
 import matplotlib.pyplot 
 import matplotlib.animation
 import math
-import agentframework
+import agentframework_zombies
 import csv
 import random
 
 
 #defining our arguments
 
-num_of_agents = 10
+num_of_agents = 100
 
 num_of_iterations = 100
 
-neighbourhood = 20
+neighbourhood = 40
+
+num_of_zombsheep = 1
 
 agents = []   
+
+zombsheep = []
 
 #Reading in data 
 
@@ -55,7 +59,11 @@ def distance_between(agents_row_a, agents_row_b):
 #Assign starting points to all our agents in their environment
 
 for i in range (num_of_agents):
-    agents.append(agentframework.Agent(environment, agents))
+    agents.append(agentframework_zombies.Agent(environment, agents))
+
+for i in range (num_of_zombsheep):
+    zombsheep.append(agentframework_zombies.Zombiesheep(environment, zombsheep, agents))
+    
     
 #First we randomise the order of agents acting for every iteration, then we move
 #them, make them eat, and share food with their neighbours   
@@ -68,21 +76,31 @@ def update(frame_number):
     matplotlib.pyplot.imshow(environment)
     matplotlib.pyplot.xlim(0, agents[0].environment_width)
     matplotlib.pyplot.ylim(0, agents[0].environment_height)
+    matplotlib.pyplot.xlim(0, zombsheep[0].environment_width)
+    matplotlib.pyplot.ylim(0, zombsheep[0].environment_height)
 
     random.shuffle(agents)
+    random.shuffle(zombsheep)
 
     for agent in agents:
         agent.move()
         agent.eat()
         agent.share_with_neighbours(neighbourhood)
-        
+    
+    for zombiesheep in zombsheep:
+        zombiesheep.move()
+        zombiesheep.bite(neighbourhood, agents, zombsheep)
    
     
     for agent in agents:
-        matplotlib.pyplot.scatter(agent.x,agent.y)
+        matplotlib.pyplot.scatter(agent.x,agent.y, c="green")
+    
+    for zombiesheep in zombsheep:
+        matplotlib.pyplot.scatter(zombiesheep.x,zombiesheep.y, c="red")
+         
 
     
-    
+"""    
 for j in range(num_of_iterations):
     random.shuffle(agents)
     
@@ -90,7 +108,7 @@ for j in range(num_of_iterations):
         agents[i].move()
         agents[i].eat()
         agents[i].share_with_neighbours(neighbourhood)
-        
+"""        
         
 #Testing to see if our agents have acces to the locations of other agents
 """
@@ -110,7 +128,7 @@ for i in range (num_of_agents):
     matplotlib.pyplot.scatter(agents[i].x,agents[i].y)
 
 
-animation = matplotlib.animation.FuncAnimation(fig, update, interval=0.01,repeat=False, frames=num_of_iterations)
+animation = matplotlib.animation.FuncAnimation(fig, update, interval=0.1,repeat=False, frames=num_of_iterations)
 
 matplotlib.pyplot.show()
 
