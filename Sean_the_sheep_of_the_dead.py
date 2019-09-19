@@ -7,7 +7,7 @@ Created on Mon Sep 16 14:12:33 2019
 
 #importing packages and creating list
 
-import matplotlib.pyplot 
+import matplotlib.pyplot as plt
 import matplotlib.animation
 import math
 import agentframework_zombies
@@ -21,7 +21,7 @@ num_of_agents = 100
 
 num_of_iterations = 100
 
-neighbourhood = 40
+neighbourhood = 10
 
 num_of_zombsheep = 1
 
@@ -44,8 +44,8 @@ with open('in.txt', newline='') as f:
 
  #Testing to see if the environment has read in properly
 """
-matplotlib.pyplot.imshow(environment)
-matplotlib.pyplot.show()
+plt.imshow(environment)
+plt.show()
 """
 
 
@@ -68,16 +68,16 @@ for i in range (num_of_zombsheep):
 #First we randomise the order of agents acting for every iteration, then we move
 #them, make them eat, and share food with their neighbours   
   
-fig = matplotlib.pyplot.figure(figsize=(12, 12))
+fig = plt.figure(figsize=(12, 12))
     
 def update(frame_number):
     
     fig.clear()   
-    matplotlib.pyplot.imshow(environment)
-    matplotlib.pyplot.xlim(0, agents[0].environment_width)
-    matplotlib.pyplot.ylim(0, agents[0].environment_height)
-    matplotlib.pyplot.xlim(0, zombsheep[0].environment_width)
-    matplotlib.pyplot.ylim(0, zombsheep[0].environment_height)
+    plt.imshow(environment)
+    plt.xlim(0, agents[0].environment_width)
+    plt.ylim(0, agents[0].environment_height)
+    plt.xlim(0, zombsheep[0].environment_width)
+    plt.ylim(0, zombsheep[0].environment_height)
 
     random.shuffle(agents)
     random.shuffle(zombsheep)
@@ -89,14 +89,20 @@ def update(frame_number):
     
     for zombiesheep in zombsheep:
         zombiesheep.move()
-        zombiesheep.bite(neighbourhood, agents, zombsheep)
+        target_agents = zombiesheep.bite(neighbourhood, agents, zombsheep)
+        
+        for target in target_agents:
+            # add a new zombie in place of the target's location
+            zombsheep.append(agentframework_zombies.Zombiesheep(environment, zombsheep, agents, [target.y, target.x]))
+            # kill the target
+            agents.remove(target)
    
     
     for agent in agents:
-        matplotlib.pyplot.scatter(agent.x,agent.y, c="green")
+        plt.scatter(agent.x,agent.y, c="green")
     
     for zombiesheep in zombsheep:
-        matplotlib.pyplot.scatter(zombiesheep.x,zombiesheep.y, c="red")
+        plt.scatter(zombiesheep.x,zombiesheep.y, c="red")
          
 
     
@@ -119,18 +125,18 @@ for i in range(10):
 """
 #Showing our agents on a plot
 
-matplotlib.pyplot.ylim(0, 299)
-matplotlib.pyplot.xlim(0, 299)
-matplotlib.pyplot.imshow(environment)
+plt.ylim(0, 299)
+plt.xlim(0, 299)
+plt.imshow(environment)
 
 for i in range (num_of_agents):
 
-    matplotlib.pyplot.scatter(agents[i].x,agents[i].y)
+    plt.scatter(agents[i].x,agents[i].y)
 
 
-animation = matplotlib.animation.FuncAnimation(fig, update, interval=0.1,repeat=False, frames=num_of_iterations)
+animation = matplotlib.animation.FuncAnimation(fig, update, interval=0.1, repeat=False, frames=num_of_iterations)
 
-matplotlib.pyplot.show()
+plt.show()
 
 #Working out the distances between all agents
 """
@@ -138,4 +144,5 @@ for j in range(num_of_agents):
     for i in range(num_of_agents):
     
         distance = distance_between(agents[i], agents[j])
-"""     
+print(distance) 
+"""
