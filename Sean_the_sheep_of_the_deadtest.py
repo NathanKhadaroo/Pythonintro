@@ -8,6 +8,9 @@ Created on Mon Sep 16 14:12:33 2019
 #imports required packages
 
 import matplotlib.pyplot as plt
+
+plt.use('TkAgg')
+
 import matplotlib.animation
 import agentframework_zombies
 import csv
@@ -21,17 +24,11 @@ num_of_iterations = 150
 
 neighbourhood = 15
 
-num_of_zombsheep = 3
-
-num_of_landmines = 20
-
-blast_radius = 25
+num_of_zombsheep = 2
 
 agents = []   
 
 zombsheep = []
-
-holylandmines = []
 
 #creates the environment from the csv file
 environment = []
@@ -58,8 +55,6 @@ for i in range (num_of_agents):
 for i in range (num_of_zombsheep):
     zombsheep.append(agentframework_zombies.Zombiesheep(environment, zombsheep, agents))
     
-for i in range (num_of_landmines):
-    holylandmines.append(agentframework_zombies.Holy_landmine(environment, zombsheep))
     
 
   
@@ -86,16 +81,10 @@ def update(frame_number):
     plt.ylim(0, agents[0].environment_height)
     plt.xlim(0, zombsheep[0].environment_width)
     plt.ylim(0, zombsheep[0].environment_height)
-    if len(holylandmines) == 0:
-        pass
-    else:
-        plt.xlim(0, holylandmines[0].environment_width)
-        plt.ylim(0, holylandmines[0].environment_height)
 
 #shuffles the order in which agents in a list move to avoid "first mover" advantages
     random.shuffle(agents)
     random.shuffle(zombsheep)
-    random.shuffle(holylandmines)
 
     for agent in agents:
         agent.move()
@@ -115,43 +104,27 @@ def update(frame_number):
             agents.remove(target)
 #this is done in this order to avoid losing the coordinates of the target
 
-    if len(holylandmines) == 0:
-        pass
-    else:
-        for Holy_landmine in holylandmines:
-                ded_zombies = Holy_landmine.detonate(blast_radius, zombsheep)
-                if len(ded_zombies)> 0:
-                        for ded_zombie in ded_zombies:
-                            zombsheep.remove(ded_zombie)
-                        holylandmines.remove(Holy_landmine)
-#plots our sheep in white and our zombies in red and our landmines in gold
+#plots our sheep in white and our zombies in red
     for agent in agents:
-        plt.scatter(agent.x, agent.y, c="snow")
+        plt.scatter(agent.x,agent.y, c="snow")
     
     for zombiesheep in zombsheep:
-        plt.scatter(zombiesheep.x, zombiesheep.y, c="red")
-        
-    if len(holylandmines) == 0:
-        pass
-    else:
-        for Holy_landmine in holylandmines:
-            plt.scatter(Holy_landmine.x, Holy_landmine.y, c="gold")
+        plt.scatter(zombiesheep.x,zombiesheep.y, c="red")
    
     print(frame_number)
    
 #Prints an update on how the sheep vs zombie battle is going
    
-    print("There are", str(len(agents)), "sheep, ", str(len(zombsheep)), "zombie sheep, and", str(len(holylandmines)), "remaining.") 
+    print("There are", str(len(agents)), "sheep, and ", str(len(zombsheep)), "zombie sheep.") 
 
 #prints a victory message for the zombies if they manage to convert all the sheep
     if len(agents) == 0:
         print("Braiiiiins! Zombies win!")
         
-#prints a victory message for the sheep if they manage to survive until dawn or all zombies die
+#prints a victory message for the sheep if they manage to survive until dawn
     if int(frame_number) == int(num_of_iterations)-1:
         print("Baaaahhhh! Sheep win!")
-    if len(zombsheep) == 0:
-        print("Baaaahhhh! Sheep win!")
+       
 
 #Showing our agents in animation 
 
@@ -159,12 +132,12 @@ plt.ylim(0, 299)
 plt.xlim(0, 299)
 plt.imshow(environment)
 
-#for i in range (num_of_agents):
+for i in range (num_of_agents):
 
-   # plt.scatter(agents[i].x,agents[i].y)
+    plt.scatter(agents[i].x,agents[i].y)
 
 
-animation = matplotlib.animation.FuncAnimation(fig, update, interval=1, repeat=False, frames=num_of_iterations)
+animation = matplotlib.animation.FuncAnimation(fig, update, interval=0.1, repeat=False, frames=num_of_iterations)
 
 plt.show()
 

@@ -9,8 +9,7 @@ import math
 
 class Agent():
     
-#Creates out sheep and gives them acces to the information they need for their behaiviour        
-
+        
     def __init__ (self, environment, agents):
          
          self.environment = environment
@@ -20,9 +19,7 @@ class Agent():
          self.y = random.randint(0, self.environment_height-1)         
          self.store = 0 
          self.agents = agents
-
-#allows our agents to move randomly two steps    
-         
+        
     def move(self):
         if random.random() < 0.5:
             self.y = (self.y + 1) % 300
@@ -33,11 +30,7 @@ class Agent():
             self.x = (self.x + 1) % 300
         else:
             self.x = (self.x - 1) % 300
-
-#these functions calculate the (euclidian) distance beween agents,
-#allows agents to eat their environment if they are "hungry", and share
-#food with their nearby neigbors 
-            
+        
     def distance_between(self,a):
                 
         return math.sqrt( ((self.x - a.x)**2) + ((self.y-a.y)**2))   
@@ -54,31 +47,23 @@ class Agent():
                 average_store = (self.store + agent.store)/2
                 self.store = average_store
                 agent.store = average_store
-        #print("Shared with agent " + str(distance) + " units away, now they both have" + str(average_store))
-
-#Creates our zombies and gives them acces to the information they need                   
+              #  print("Shared with agent " + str(distance) + " units away, now they both have" + str(average_store))
+               
 class Zombiesheep():
-
     def __init__(self, environment, zombsheep, agents, spawn_coordinates = None):
         self.environment = environment
         self.environment_height = len(environment)
         self.environment_width = len(environment)
         self.agents = agents
         
-        #Sets the spawning location for our zombies, randomly for 'original zombies
-        #and for newly converted zombies at the location where they were bitten
-        
+        # setting location of new zombie
         if spawn_coordinates is None:
             self.x = random.randint(0, self.environment_width-1)
             self.y = random.randint(0, self.environment_height-1)
         else:
             self.x = spawn_coordinates[1]
             self.y = spawn_coordinates[0]
-            
-#move and distance between work the same as for our sheep (agents) 
-#but faster (these are fast Zombieland style zombies, not slow Dawn 
-# of the dead type zombies)
-            
+
     def move(self):
         if random.random() < 0.5:
             self.y = (self.y + 5) % 300
@@ -93,10 +78,7 @@ class Zombiesheep():
     def distance_between(self,a):
                 
         return math.sqrt( ((self.x - a.x)**2) + ((self.y-a.y)**2)) 
-
-#checks if a sheep is in the zombie's neighborhood, if there is it appends it a list
-#and returns that list
-        
+    
     def bite(self, neighbourhood, agents, zombsheep):
         list_agent = []
         for agent in self.agents:
@@ -105,30 +87,5 @@ class Zombiesheep():
                 list_agent.append(agent)
         return list_agent
     
-#Adds anti zombie traps which detonate when zombies approach,
-#showering the area with holy water, killing zombies but leaving sheep unaffected
-class Holy_landmine():
     
-    def __init__(self, environment, zombsheep):
-        self.environment = environment
-        self.environment_height = len(environment)
-        self.environment_width = len(environment)
-        self.x = random.randint(0, self.environment_width-1)
-        self.y = random.randint(0, self.environment_height-1)
-        self.zombsheep = zombsheep
-        
-    def distance_between(self,a):
-                
-        return math.sqrt( ((self.x - a.x)**2) + ((self.y-a.y)**2)) 
-        
-    def detonate(self, blast_radius, zombsheep):
-        dead_zombies = []
-        for zombiesheep in self.zombsheep:
-            distance = self.distance_between(zombiesheep)
-            if distance <= blast_radius:
-                dead_zombies.append(zombiesheep)
-        return dead_zombies
-                
-        
-                
         
