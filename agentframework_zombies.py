@@ -66,7 +66,7 @@ class Zombiesheep():
         self.agents = agents
         
         #Sets the spawning location for our zombies, randomly for 'original zombies
-        #and for newly converted zombies at the location where they were bitten
+        #and at the location where they were bittenfor newly converted zombies
         
         if spawn_coordinates is None:
             self.x = random.randint(0, self.environment_width-1)
@@ -75,7 +75,7 @@ class Zombiesheep():
             self.x = spawn_coordinates[1]
             self.y = spawn_coordinates[0]
             
-#move and distance between work the same as for our sheep (agents) 
+#move and distance between_work the same as for our sheep (agents) 
 #but faster (these are fast Zombieland style zombies, not slow Dawn 
 # of the dead type zombies)
             
@@ -107,7 +107,7 @@ class Zombiesheep():
     
 #Adds anti zombie traps which detonate when zombies approach,
 #showering the area with holy water, killing zombies but leaving sheep unaffected
-class Holy_landmine():
+class Holy_landmine_of_Antioch():
     
     def __init__(self, environment, zombsheep):
         self.environment = environment

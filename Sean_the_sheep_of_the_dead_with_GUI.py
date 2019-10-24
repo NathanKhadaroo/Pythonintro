@@ -7,31 +7,74 @@ Created on Mon Sep 16 14:12:33 2019
 
 #imports required packages
 
+import tkinter as tk
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.animation
 import agentframework_zombies
 import csv
 import random
 
-#defines our arguments and creating the lists of sheep and zombiesheep
+#Creates a window which allows us to enter in parameters
 
-num_of_agents = 100
+fields = ('Number of Sheep', 'Number of Zombies', 'Number of Landmines', 'Number of Iterations', 'Neighborhood size', 'Explosion size')
 
-num_of_iterations = 150
+def run():
+    animation = matplotlib.animation.FuncAnimation(fig, update(), interval=1, repeat=False, frames=num_of_iterations)
+    canvas.show()
+    
+def makeform(root, fields):
+    entries = {}
+    for field in fields:
+        row = tk.Frame(root)
+        lab = tk.Label(row, width=22, text=field+": ", anchor='w')
+        ent = tk.Entry(row)
+        ent.insert(0, "0")
+        row.pack(side=tk.TOP, 
+                 fill=tk.X, 
+                 padx=5, 
+                 pady=5)
+        lab.pack(side=tk.LEFT)
+        ent.pack(side=tk.RIGHT, 
+                 expand=tk.YES, 
+                 fill=tk.X)
+        entries[field] = ent
+    return entries
 
-neighbourhood = 15
+root = tk.Tk()
+root.wm_title("Sheep Horror Model")
+ents = makeform(root, fields)
+b1 = tk.Button(root, text='Run the model!',command=(run))
+b1.pack(side=tk.LEFT, padx=5, pady=5)
+fig = plt.figure(figsize=(12, 12))
 
-num_of_zombsheep = 3
+root.mainloop()
 
-num_of_landmines = 20
+canvas = matplotlib.backends.backend_tkagg.FigureCanvasTkAgg(fig, master=root)
+canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
-blast_radius = 25
+
+#defines our arguments and creating the lists of sheep and zombiesheep  
+
+num_of_agents = int(entries['Number of Sheep'].get())
+
+num_of_zombsheep = int(entries['Number of Zombies'].get())
+
+num_of_landmines = int(entries['Number of Landmines'].get())
+
+num_of_iterations = int(entries['Number of Iterations'].get())
+
+neighbourhood = int(entries['Neighborhood size'].get())
+
+blast_radius = int(entries['Explosion size'].get())
 
 agents = []   
 
 zombsheep = []
 
 holylandmines = []
+
 
 #creates the environment from the csv file
 environment = []
@@ -60,10 +103,7 @@ for i in range (num_of_zombsheep):
     
 for i in range (num_of_landmines):
     holylandmines.append(agentframework_zombies.Holy_landmine_of_Antioch(environment, zombsheep))
-    
 
-  
-fig = plt.figure(figsize=(12, 12))
  
  
 '''
@@ -75,8 +115,8 @@ for i in range(10):
 '''  
 
 '''
-This makes the model run until the zombies have wiped out all ofthe sheep or 
-the desired number of iterations has been reached.  
+#This makes the model run until the zombies have wiped out all ofthe sheep or 
+#the desired number of iterations has been reached.  
 '''
 def update(frame_number):
     
@@ -153,7 +193,7 @@ def update(frame_number):
     if len(zombsheep) == 0:
         print("Baaaahhhh! Sheep win!")
 
-#Showing our agents in animation 
+#Showing our model in an animation 
 
 plt.ylim(0, 299)
 plt.xlim(0, 299)
@@ -164,8 +204,11 @@ plt.imshow(environment)
    # plt.scatter(agents[i].x,agents[i].y)
 
 
-animation = matplotlib.animation.FuncAnimation(fig, update, interval=1, repeat=False, frames=num_of_iterations)
+#animation = matplotlib.animation.FuncAnimation(fig, update, interval=1, repeat=False, frames=num_of_iterations)
+#plt.show()
 
-plt.show()
 
+
+#ends
+tk.mainloop()
    

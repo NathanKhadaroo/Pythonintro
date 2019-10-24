@@ -7,6 +7,7 @@ Created on Mon Sep 16 14:12:33 2019
 
 #imports required packages
 
+import sys
 import matplotlib.pyplot as plt
 import matplotlib.animation
 import agentframework_zombies
@@ -15,17 +16,17 @@ import random
 
 #defines our arguments and creating the lists of sheep and zombiesheep
 
-num_of_agents = 100
+num_of_agents = int(sys.argv[1])
 
-num_of_iterations = 150
+num_of_iterations = int(sys.argv[2])
 
-neighbourhood = 15
+neighbourhood = int(sys.argv[3])
 
-num_of_zombsheep = 3
+num_of_zombsheep = int(sys.argv[4])
 
-num_of_landmines = 20
+num_of_landmines = int(sys.argv[5])
 
-blast_radius = 25
+blast_radius = int(sys.argv[6])
 
 agents = []   
 
@@ -141,7 +142,7 @@ def update(frame_number):
    
 #Prints an update on how the sheep vs zombie battle is going
    
-    print("There are", str(len(agents)), "sheep, ", str(len(zombsheep)), "zombie sheep, and", str(len(holylandmines)), "remaining.") 
+    print("There are", str(len(agents)), "sheep, ", str(len(zombsheep)), "zombie sheep, and", str(len(holylandmines)), "landmines remaining.") 
 
 #prints a victory message for the zombies if they manage to convert all the sheep
     if len(agents) == 0:
